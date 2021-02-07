@@ -6,10 +6,12 @@
 #include<limits.h>
 #include<float.h>
 
-#include"include/utility.h"
+#include"../include/parameters.h"
+#include"../include/network.h"
+#include"../include/data_format.h"
 
-/*TODO :   
-            entre 1/6 et 1/5 des neurones ne s'activent pas
+/*
+TODO :  environ 1/6 des neurones ne sont pas classés
 */
 
 extern void print_neurons(reseau *);
@@ -18,10 +20,13 @@ extern void print_results(reseau *);
 extern data* load(char *);
 extern void fit(reseau *, data *);
 
+
+//global variables
 int DATA_LENGTH;
-int NB_CARAC;
+int NB_FEATURE;
 char ** names;
-int nb_class;
+int NB_CLASS;
+
 
 int main(int argc, char**argv){
 
@@ -32,7 +37,7 @@ int main(int argc, char**argv){
     }
     
     // set initial value of global variable 
-    NB_CARAC = 0;
+    NB_FEATURE = 0;
     DATA_LENGTH = 0;
 
     //load database

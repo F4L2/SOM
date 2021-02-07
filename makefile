@@ -3,17 +3,18 @@ CC=gcc
 CFLAGS=-I $(IDIR) -W -Wall
 
 ODIR=obj
+SDIR=src
 
 LIBS=-lm -std=c11
 
-_DEPS = utility.h
+_DEPS = network.h data_format.h parameters.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o func.o learn.o
+_OBJ = main.o func.o learn.o load_data.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 
-$(ODIR)/%.o: %.c $(DEPS)
+$(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	mkdir -p $(ODIR) 
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIBS)
 

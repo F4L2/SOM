@@ -6,8 +6,16 @@
 #include<limits.h>
 #include<float.h>
 
-#include"include/utility.h"
+#include"../include/parameters.h"
+#include"../include/network.h"
+#include"../include/data_format.h"
 
+/*
+
+This file contain the learning algorithm of SOM,
+In short, it tries to represent the data in dimension N to a map of neurons in dimension 2
+
+*/
 
 extern double * normalize(double* vec);
 extern double randFrom(double min, double max);
@@ -20,21 +28,22 @@ void fit(reseau * network, data * data_col){
 
     int i,j,n,x,iter = 0;
 
-    // initialize data index list
+    // initialize data index list for data lecture
     int * rand_lec = malloc(sizeof(int) * DATA_LENGTH);
     for(i = 0; i< DATA_LENGTH; i++)
         rand_lec[i] = i;
     
-    //normalize feature values
+    //normalize feature values to be between [0,1]
     for(i = 0; i< DATA_LENGTH; i++){
-        data_col[i].norm = malloc(sizeof(double) * NB_CARAC);
+        data_col[i].norm = malloc(sizeof(double) * NB_FEATURE);
         data_col[i].norm = normalize(data_col[i].carac);
     }  
 
     // feature average / average vector (initial weights)
-    double * middle = malloc(sizeof(double) * NB_CARAC);
+    // The 
+    double * middle = malloc(sizeof(double) * NB_FEATURE);
     double sum;
-    for(i = 0; i < NB_CARAC ; i++){
+    for(i = 0; i < NB_FEATURE ; i++){
         sum = 0;
         for(j = 0; j< DATA_LENGTH; j++){
             sum += data_col[j].norm[i];
@@ -50,8 +59,8 @@ void fit(reseau * network, data * data_col){
     srand(time(NULL));
     for(i = 0; i< NBL; i++){
         for(j = 0; j< NBC; j++){
-            network->map[i* NBL +j].feat = malloc(sizeof(double) * NB_CARAC);
-            for(n = 0; n < NB_CARAC; n++){
+            network->map[i* NBL +j].feat = malloc(sizeof(double) * NB_FEATURE);
+            for(n = 0; n < NB_FEATURE; n++){
                 rnd = randFrom(borne_inf, borne_sup);
                 network->map[i* NBL +j].feat[n] = middle[n] + rnd;
             }
@@ -152,7 +161,7 @@ void fit(reseau * network, data * data_col){
                         continue;
                         
                     // close the distance toward the BMU
-                    for(x = 0; x < NB_CARAC ; x++){
+                    for(x = 0; x < NB_FEATURE ; x++){
                         double diff = network->map[i * NBL + j].feat[x] - data_col[bmu->data_id].norm[x];
                         network->map[i * NBL + j].feat[x] -= (network->alph * diff) /(network->map[i * NBL + j].dist_to_bmu +1);  
                     
