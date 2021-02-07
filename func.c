@@ -62,16 +62,17 @@ double euclid(double *a, double *b){
 
 
 // print each neuron's features and its predicted class
-void print_neurons(reseau net){
-    for(int i = 0; i < NBL; i++){
-        for(int j = 0; j< NBC; j++){
+void print_neurons(reseau * net){
+    int i,j,x;
+    for(i = 0; i < NBL; i++){
+        for(j = 0; j< NBC; j++){
             printf("[ ");
-            for(int x = 0; x< NB_CARAC; x++){
-                printf("%f, ", net.map[i * NBL +j].feat[x]);
+            for(x = 0; x< NB_CARAC; x++){
+                printf("%f, ", net->map[i * NBL +j].feat[x]);
             }
             printf(" ] ");
-            if(net.map[i* NBL + j].etiq != NULL){
-                printf(": %s\n", net.map[i* NBL + j].etiq);
+            if(net->map[i* NBL + j].etiq != NULL){
+                printf(": %s\n", net->map[i* NBL + j].etiq);
             }else{
                 printf(": none\n");
             }
@@ -80,18 +81,18 @@ void print_neurons(reseau net){
 }
 
 // visualize the netword in 2D
-void print_results(reseau net){
+void print_results(reseau * net){
     int i,j,y;
     int noclass = 0;
     for(i = 0; i < NBL; i++){
         for(j = 0; j< NBC; j++){
-            if(net.map[i* NBL + j].etiq == NULL){
+            if(net->map[i* NBL + j].etiq == NULL){
                 printf(". ");
                 noclass ++;
                 continue;
             }
             for(y = 0; y < nb_class; y++){
-                if(strcmp(net.map[i* NBL + j].etiq, names[y]) == 0)
+                if(strcmp(net->map[i* NBL + j].etiq, names[y]) == 0)
                     break;
             }
             printf("%c ", 'A' + y);

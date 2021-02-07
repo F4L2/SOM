@@ -1,3 +1,4 @@
+// model parameters
 #define NBL 10 // map lines
 #define NBC 12 // map cols
 #define ALPHA 0.7 // learning coeficient
