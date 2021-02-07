@@ -9,7 +9,7 @@ The neighborhood gets smaller at each iteration.
 
 ## Installation
 No obscure pre-requisite to run the code, you just need to install the gcc compiler.  
-Configure the model's parameters in *"./include/parameters.h"*  
+Configure the model's parameters in **"./include/parameters.h"**  
 
 ```
 // model parameters
@@ -19,7 +19,7 @@ Configure the model's parameters in *"./include/parameters.h"*
 #define ITER_MAX 500 // max learning iteration
 ```
 
-To compile, you can either use the makefile or the following commandline.  
+To compile, you can either use the **makefile** or the following commandline.  
 
 ```
 gcc -W -Wall -o som main.c func.c learn.c -lm -std=c11  
