@@ -180,5 +180,6 @@ A A A A A A A A . A A A
 neuron(s) not classed: 24 / 120
 ```
 
-Here we have a map containing 10x12 neurons, after 500 iteration. 96 neurons have found a class (A, B or C) and 24 didn't.  
-We can see in that map visualization that the classes are well separated.
+Here we have a map containing 10x12 neurons, after 500 iteration 96 neurons have found a class (Iris-setosa/A, Iris-versicolor/B or Iris-virginica/C).  
+We can see in the map visualization that the classes are well separated.  
+The algorithm still can't find 24 neurons, this project would require a little more work.
