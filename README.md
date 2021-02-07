@@ -7,7 +7,7 @@ At each iteration, the neuron looks in its neighborhood the data point that is m
 The neighborhood gets smaller at each iteration.  
 
 
-## Installation
+## Instructions
 No obscure pre-requisite to run the code, you just need to install the gcc compiler.  
 Configure the model's parameters in **"./include/parameters.h"**  
 
@@ -19,7 +19,12 @@ Configure the model's parameters in **"./include/parameters.h"**
 #define ITER_MAX 500 // max learning iteration
 ```
 
-To compile, you can either use the **makefile** or the following commandline.  
+To compile, you can either use the **makefile** with the command.  
+```
+make
+```
+
+Or the following commandline.  
 
 ```
 gcc -W -Wall -o som main.c func.c learn.c -lm -std=c11  
@@ -27,6 +32,10 @@ gcc -W -Wall -o som main.c func.c learn.c -lm -std=c11
 
 And run the program in the terminal by using this commandline with the data collection *"iris.data"* (https://archive.ics.uci.edu/ml/datasets/iris)
 ```
+#linux
+./som iris.data  
+
+#windows
 ./som.exe iris.data  
 ```
 
