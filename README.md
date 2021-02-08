@@ -2,9 +2,9 @@
 
 The SOM neural network is a supervised learning algorithm.  
 In short, it tries to represent the data in dimension D to a map of neurons in dimension K (in this case K=2).  
-The principle is to intialize randomly a vector of neurons that has the same dimensions as the data.  
-At each iteration, the neuron looks in its neighborhood the data point that is most similar to itself and fit its features to that data.  
-The neighborhood gets smaller at each iteration.  
+The principle is to intialize a map of neurons to be the average of all data points plus an additional noise, each neuron having the same dimensions as the data points.  
+At each iteration, the neuron looks in its neighborhood the data point that is most similar to itself (calculated with euclidean distance) and pull itself towards that data point.  
+The neighborhood gets smaller at each iteration, specializing each neuron to a specific data point.  
 
 
 ## Instructions
@@ -182,4 +182,4 @@ neuron(s) not classed: 24 / 120
 
 Here we have a map containing 10x12 neurons, after 500 iteration 96 neurons have found a class (Iris-setosa/A, Iris-versicolor/B or Iris-virginica/C).  
 We can see in the map visualization that the classes are well separated.  
-The algorithm still can't find 24 neurons, this project would require a little more work.
+The algorithm didn't find a class for 24 neurons. (these neurons are the BMU of none of the data point of the collection)

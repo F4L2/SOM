@@ -40,7 +40,7 @@ void fit(reseau * network, data * data_col){
     }  
 
     // feature average / average vector (initial weights)
-    // The 
+    // The average value of each normalized feature
     double * middle = malloc(sizeof(double) * NB_FEATURE);
     double sum;
     for(i = 0; i < NB_FEATURE ; i++){
@@ -52,7 +52,8 @@ void fit(reseau * network, data * data_col){
         middle[i] = sum;
     }
     
-    // init Wi centré
+    // init Weights W
+    // for each neuron, we initiate its features as the average of the data collection PLUS a little noise
     double borne_sup = 0.005;
     double borne_inf = -0.005;
     double rnd;
@@ -78,6 +79,7 @@ void fit(reseau * network, data * data_col){
     double best_dist, tmp;
     srand(time(NULL));
     
+
     // SOM network, learning loop
     for(iter = 0; iter < ITER_MAX; iter++){
         // déterminer le voisinnage en fonction du temps d'apprentissage
@@ -86,18 +88,21 @@ void fit(reseau * network, data * data_col){
         double nominator = (ITER_MAX - iter);
         double fraction = nominator / ITER_MAX;
         network->r_voisin = rayon * fraction;
-        network->alph = fraction * ALPHA;  // what ?? comparer avec une variable dissociée du réseau
+        double alpha = fraction * network->alph;
         
         shuffle(rand_lec);
         
-        // phase 1
-        // seek BMU (best matching unit), the data point closest to the neuron
+        
+        // iterative learning loop (for each data point, find the closest neuron and get it closer to the data point)
         for(n = 0; n < DATA_LENGTH; n++){    
             bmu = h.last;
             h.toChecks = 0;
             h.check_point = h.last;
-            best_dist = DBL_MAX; // infinie mathématique
-            //chercher BMU
+            best_dist = DBL_MAX; // assuming a ridiculously high initial distance, the true closest can only be closer
+
+
+            // phase 1
+            // find BMU (best matching unit), the data point closest to the neuron
             for(i = 0; i < NBL; i++){
                 for(j = 0; j < NBC; j++){
                     tmp = euclid(network->map[i* NBL +j].feat, data_col[rand_lec[n]].norm);
@@ -110,6 +115,7 @@ void fit(reseau * network, data * data_col){
                     }
                 }      
             }            
+
             //chercher les unités équivalentes
             // TODO:    pas besoin de refaire une recherche, je peux stocker les équivalents dans une liste chainée (si je trouve plus près je supprime la liste et en refait une)
             //          et itérer sur cette liste chainée
@@ -139,10 +145,9 @@ void fit(reseau * network, data * data_col){
                 }
             }
             
-            //adjust neighborhood
-            // phase 2  
-            //LEARNING
-            //rapprocher le neurone à la position de la donnée, utiliser alph
+            
+            // phase 2
+            // adjust neighborhood, close the gap between the neuron and the BMU
             for(i = 0; i < NBL; i++){
                 for(j = 0; j < NBC; j++){
                     //determine distance to BMU
@@ -163,7 +168,7 @@ void fit(reseau * network, data * data_col){
                     // close the distance toward the BMU
                     for(x = 0; x < NB_FEATURE ; x++){
                         double diff = network->map[i * NBL + j].feat[x] - data_col[bmu->data_id].norm[x];
-                        network->map[i * NBL + j].feat[x] -= (network->alph * diff) /(network->map[i * NBL + j].dist_to_bmu +1);  
+                        network->map[i * NBL + j].feat[x] -= (alpha * diff) /(network->map[i * NBL + j].dist_to_bmu +1);  
                     
                     }
                 }
@@ -172,7 +177,7 @@ void fit(reseau * network, data * data_col){
     }
     
 
-    // class attribution
+    // class attribution (on the data used for learning)
     typing * first = malloc(sizeof(typing));
     first->suiv = malloc(sizeof(typing));
     typing * get;
@@ -181,6 +186,7 @@ void fit(reseau * network, data * data_col){
     int bmu_id;  
     int nb_bmu;
     srand(time(NULL)); 
+
     for(n = 0; n < DATA_LENGTH; n++){
         get = first->suiv;
         nb_bmu = 0;
